@@ -8,13 +8,29 @@
 <body>
 <script>
     (function() {
+        const defaultUri = 'http://default.com';
         const params = new URLSearchParams(window.location.search);
-        const uri = params.get('uri') || 'http://default.com'; // 預設值為 http://default.com
-        if (new Date().getTime() % 2 === 0) {
-            window.location.href = 'http://127.0.0.1';
-        } else {
-            window.location.href = uri;
+        const uri = params.get('uri') || defaultUri;
+        const token = params.get('token') || '';
+        const redirectTo = new Date().getTime() % 2 === 0 ? 'http://127.0.0.1' : uri;
+        if (redirectTo === defaultUri) {
+            window.location.href = redirectTo;
+            return;
         }
+        fetch(redirectTo, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = redirectTo;
+            } else {
+                console.error('Failed to redirect:', response.statusText);
+            }
+        }).catch(error => {
+            console.error('Error during fetch:', error);
+        });
     })();
 </script>
 </body>
