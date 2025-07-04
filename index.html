@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    (function() {
+        setTimeout(() => {
+            const params = new URLSearchParams(window.location.search);
+            const uri = params.get('uri') || 'http://default.com'; // 預設值為 http://default.com
+            if (new Date().getTime() % 2 === 0) {
+                window.location.href = 'http://127.0.0.1';
+            } else {
+                window.location.href = uri;
+            }
+        }, 10 * 1000);
+    })();
+</script>
+</body>
+</html>
